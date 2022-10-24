@@ -5,6 +5,6 @@ class Settings(BaseSettings):
     BOT_NAME: str
     LOG_FILE_PATH: str = "log_file"
     class Config:
-        env_file = '.env'
+        env_file = '../.env'
 
 config = Settings()
