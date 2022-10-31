@@ -68,4 +68,5 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd helper-tg-bot
+            /usr/local/bin/docker-compose pull
             /usr/local/bin/docker-compose up -d
