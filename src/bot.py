@@ -12,9 +12,9 @@ bot = telebot.TeleBot(config.BOT_TOKEN, parse_mode="markdown")
 @bot.message_handler(commands=['start'])
 def start(message):
     bot.send_message(message.chat.id, "Привет ✌️, сегодня " + str(datetime.date.today()) + ". \
-    Бот делится с вами курсом валют с сайта ЦБ. Отправьте /currency, чтобы выбрать валюту.")
+    Бот делится с вами курсом валют с сайта ЦБ и погодой с Яндекса. Отправь /menu ")
 
-@bot.message_handler(commands=["currency"])
+@bot.message_handler(commands=["menu"])
 def currency(message):
     markup = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
 
@@ -31,7 +31,7 @@ def reply(message):
         case "Курсы валют 📊":
             bot.send_message(message.chat.id, get_currency(date_to_parse=datetime.date.today()))
         case "Погода в Адлере 🌝":
-            bot.send_message(message.chat.id, yandex_weather('43.430664','39.931168',token_yandex))
+            bot.send_message(message.chat.id, yandex_weather('43.430664','39.931168',config.YANDEX_TOKEN))
         case "Назад":
             # Закрытие клавиатуры
             bot.send_message(message.chat.id, "Вы закрыли клавиатуру. Отправьте */currency*, чтобы открыть клавиатуру.", reply_markup=types.ReplyKeyboardRemove())
@@ -48,6 +48,7 @@ def get_currency(date_to_parse) -> str:
     compiled_letters_pattern = re.compile(r"[а-яА-я]+")
     compiled_numbers_pattern = re.compile(r"\d+")
     valuts = ['Доллар США', 'Евро', 'Белорусский рубль']
+    answer = ''
     url = f"https://cbr.ru/scripts/XML_daily.asp?date_req={day}/{month}/{year}"
 
     request = requests.get(url)
@@ -61,7 +62,9 @@ def get_currency(date_to_parse) -> str:
         price = f"{numbers[-2]}.{numbers[-1]}"
 
         if currency_name in valuts:
-            str.answer = str.answer + f"Курс *{currency_name}* на {day}.{month}.{year}: {price}"
+            answer = answer + str(f"Курс *{currency_name}* на {day}.{month}.{year}: {price}")
+
+    return answer
 
 def yandex_weather(latitude, longitude, token_yandex: str):
     url_yandex = f'https://api.weather.yandex.ru/v2/informers/?lat={latitude}&lon={longitude}&[lang=ru_RU]'
