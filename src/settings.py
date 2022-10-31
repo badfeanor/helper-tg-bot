@@ -6,6 +6,6 @@ class Settings(BaseSettings):
     YANDEX_TOKEN: str
     LOG_FILE_PATH: str = "log_file"
     class Config:
-        env_file = '../.env'
+        env_file = '../app/.env'
 
 config = Settings()

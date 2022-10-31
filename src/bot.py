@@ -22,8 +22,8 @@ def currency(message):
     button_2 = telebot.types.KeyboardButton("Погода в Адлере 🌝")
     button_3 = telebot.types.KeyboardButton("Назад")
 
-    markup.add(button_1, button_2, button_3, button_4, button_5)
-    bot.send_message(message.chat.id, "Выберите валюту:", reply_markup=markup)
+    markup.add(button_1, button_2, button_3)
+    bot.send_message(message.chat.id, "Выбери кнопку:", reply_markup=markup)
 
 @bot.message_handler(content_types=["text"])
 def reply(message):
@@ -62,7 +62,7 @@ def get_currency(date_to_parse) -> str:
         price = f"{numbers[-2]}.{numbers[-1]}"
 
         if currency_name in valuts:
-            answer = answer + str(f"Курс *{currency_name}* на {day}.{month}.{year}: {price}")
+            answer = answer + str(f"Курс *{currency_name}* на {day}.{month}.{year}: {price}\n")
 
     return answer
 
@@ -77,8 +77,8 @@ def yandex_weather(latitude, longitude, token_yandex: str):
                   'snow-showers': 'снегопад', 'hail': 'град', 'thunderstorm': 'гроза',
                   'thunderstorm-with-rain': 'дождь с грозой', 'thunderstorm-with-hail': 'гроза с градом'
                   }
-    wind_dir = {'nw': 'северо-западное', 'n': 'северное', 'ne': 'северо-восточное', 'e': 'восточное',
-                'se': 'юго-восточное', 's': 'южное', 'sw': 'юго-западное', 'w': 'западное', 'с': 'штиль'}
+    wind_dir = {'nw': 'северо-западный', 'n': 'северный', 'ne': 'северо-восточный', 'e': 'восточный',
+                'se': 'юго-восточный', 's': 'южный', 'sw': 'юго-западный', 'w': 'западный', 'с': 'штиль'}
 
     yandex_json = json.loads(yandex_req.text)
     yandex_json['fact']['condition'] = conditions[yandex_json['fact']['condition']]
@@ -88,7 +88,7 @@ def yandex_weather(latitude, longitude, token_yandex: str):
         parts['wind_dir'] = wind_dir[parts['wind_dir']]
 
     dict_weather = dict()
-    params = ['condition', 'wind_dir', 'pressure_mm', 'humidity']
+    params = ['condition', 'wind_dir', 'wind_speed', 'pressure_mm', 'humidity', 'temp_water']
     for parts in yandex_json['forecast']['parts']:
         dict_weather[parts['part_name']] = dict()
         dict_weather[parts['part_name']]['temp'] = parts['temp_avg']
@@ -103,14 +103,9 @@ def yandex_weather(latitude, longitude, token_yandex: str):
     dict_weather['link'] = yandex_json['info']['url']
 
     return (f'Погода в Адлере на сегодня!'
-            f' Температура сейчас {dict_weather["сейчас"]["temp"]}!'
-            f' А на небе {dict_weather["сейчас"]["sky"]}.'
-            f' Температура через три часа {dict_weather["через3ч"]["temp"]}!'
-            f' А на небе {dict_weather["через3ч"]["sky"]}.'
-            f' Температура через шесть часов {dict_weather["через6ч"]["temp"]}!'
-            f' А на небе {dict_weather["через6ч"]["sky"]}.'
-            f' Температура через девять часов {dict_weather["через9ч"]["temp"]}!'
-            f' А на небе {dict_weather["через9ч"]["sky"]}.'
-            f' А здесь ссылка на подробности {dict_weather["link"]}')
+            f' Температура {dict_weather["fact"]["temp"]} градусов.'
+            f' А на небе {dict_weather["fact"]["condition"]}.'
+            f' Ветер {dict_weather["fact"]["wind_dir"]}, а скорость {dict_weather["fact"]["wind_speed"]} м/с.'
+            f' Температура воды {dict_weather["fact"]["temp_water"]} градусов.')
 
 bot.infinity_polling()
