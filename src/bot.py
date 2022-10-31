@@ -103,9 +103,9 @@ def yandex_weather(latitude, longitude, token_yandex: str):
     dict_weather['link'] = yandex_json['info']['url']
 
     return (f'Погода в Адлере на сегодня!\n'
-            f' Температура {dict_weather["fact"]["temp"]} градусов.\n'
-            f' А на небе {dict_weather["fact"]["condition"]}.\n'
-            f' Ветер {dict_weather["fact"]["wind_dir"]}, а скорость {dict_weather["fact"]["wind_speed"]} м/с.\n'
-            f' Температура воды {dict_weather["fact"]["temp_water"]} градусов.')
+            f'Температура *{dict_weather["fact"]["temp"]} градусов*.\n'
+            f'На улице *{dict_weather["fact"]["condition"]}*.\n'
+            f'Ветер *{dict_weather["fact"]["wind_dir"]}*, а скорость *{dict_weather["fact"]["wind_speed"]} м/с*.\n'
+            f'Температура воды {dict_weather["fact"]["temp_water"]} градусов.')
 
 bot.infinity_polling()
