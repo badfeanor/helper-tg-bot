@@ -34,7 +34,7 @@ def reply(message):
             bot.send_message(message.chat.id, yandex_weather('43.430664','39.931168',config.YANDEX_TOKEN))
         case "Назад":
             # Закрытие клавиатуры
-            bot.send_message(message.chat.id, "Вы закрыли клавиатуру. Отправьте */currency*, чтобы открыть клавиатуру.", reply_markup=types.ReplyKeyboardRemove())
+            bot.send_message(message.chat.id, "Вы закрыли клавиатуру. Отправьте */currency*, чтобы открыть клавиатуру.", reply_markup=telebot.types.ReplyKeyboardRemove())
         case _:
             bot.send_message(message.chat.id, "Вы отправили неизвестную мне команду. Отправьте */start* для начала общения с ботом.")
 
@@ -44,7 +44,7 @@ def get_currency(date_to_parse) -> str:
     :param date_to_parse: Дата курса.
     :return: Текст с именем валюты и её курсом.
     """
-    day, month, year = date_to_parse.day, date_to_parse.month, date_to_parse.year
+    year, month, day = str(date_to_parse).split('-')
     compiled_letters_pattern = re.compile(r"[а-яА-я]+")
     compiled_numbers_pattern = re.compile(r"\d+")
     valuts = ['Доллар США', 'Евро', 'Белорусский рубль']
