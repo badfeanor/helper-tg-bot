@@ -9,3 +9,12 @@ services:
     env_file:
       - .env
     command: python3 src/bot.py
+  telegram_bot_scheduler:
+    image: ghcr.io/badfeanor/helper-tg-bot:main
+    container_name: "${BOT_SCHEDULER_CONTAINER_NAME}"
+    restart: always
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    command: python3 src/scheduler.py
