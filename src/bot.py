@@ -153,6 +153,6 @@ def yandex_weather_new():
 
 
 if __name__ == "__main__":
-    schedule.every().saturday.at("20:15").do(function_to_run)
+    schedule.every().day.at("20:20").do(function_to_run)
     Thread(target=schedule_checker).start()
     bot.infinity_polling()
