@@ -134,10 +134,9 @@ def yandex_weather_new():
             pogoda_days_result = pogoda_days_result + str(f"{day.get('aria-label')}\n")
 
     return (f'*Погода в Адлере сейчас!*\n'
-            f'{pogoda_days_result}'
-            f'{pogoda_fact_props_wind} {pogoda_fact_props_humidity} {pogoda_fact_props_water}\n\n'
+            f'{pogoda_fact}'
+            f'{pogoda_fact_props_wind} {pogoda_fact_props_humidity} {pogoda_fact_props_water}'
             f'*Прогоз на сегодня и ближайшие пару дней:*\n'
-            f''
-            )
+            f'{pogoda_days_result}')
 
 bot.infinity_polling()
