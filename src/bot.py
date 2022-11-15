@@ -12,15 +12,14 @@ from threading import Thread
 from time import sleep
 
 bot = telebot.TeleBot(config.BOT_TOKEN, parse_mode="markdown")
-chatid = config.BOT_TOKEN.split(':')[0]
+chatid = '-1001266564154'
 def schedule_checker():
     while True:
         schedule.run_pending()
         sleep(1)
 
-@bot.message_handler(commands=['start'])
-def function_to_run(message):
-    return bot.send_message(message.chat.id, yandex_weather_new())
+def function_to_run():
+    return bot.send_message(chatid, yandex_weather_new())
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -154,6 +153,6 @@ def yandex_weather_new():
 
 
 if __name__ == "__main__":
-    schedule.every().day.at("20:30").do(function_to_run())
+    schedule.every().day.at("20:50").do(function_to_run())
     Thread(target=schedule_checker).start()
     bot.infinity_polling()
