@@ -31,7 +31,7 @@ def reply(message):
         case "Курсы валют 📊":
             bot.send_message(message.chat.id, get_currency(date_to_parse=datetime.date.today()))
         case "Погода в Адлере 🌝":
-            bot.send_message(message.chat.id, yandex_weather())
+            bot.send_message(message.chat.id, yandex_weather_new())
             # bot.send_message(message.chat.id, yandex_weather('43.430664','39.931168',config.YANDEX_TOKEN))
         case "Назад":
             # Закрытие клавиатуры
