@@ -31,7 +31,8 @@ def reply(message):
         case "Курсы валют 📊":
             bot.send_message(message.chat.id, get_currency(date_to_parse=datetime.date.today()))
         case "Погода в Адлере 🌝":
-            bot.send_message(message.chat.id, yandex_weather('43.430664','39.931168',config.YANDEX_TOKEN))
+            bot.send_message(message.chat.id, yandex_weather())
+            # bot.send_message(message.chat.id, yandex_weather('43.430664','39.931168',config.YANDEX_TOKEN))
         case "Назад":
             # Закрытие клавиатуры
             bot.send_message(message.chat.id, "Вы закрыли клавиатуру. Отправьте */currency*, чтобы открыть клавиатуру.", reply_markup=telebot.types.ReplyKeyboardRemove())
@@ -107,5 +108,36 @@ def yandex_weather(latitude, longitude, token_yandex: str):
             f'На улице *{dict_weather["fact"]["condition"]}*.\n'
             f'Ветер *{dict_weather["fact"]["wind_dir"]}*, а скорость *{dict_weather["fact"]["wind_speed"]} м/с*.\n'
             f'Температура воды {dict_weather["fact"]["temp_water"]} градусов.')
+
+def yandex_weather_new():
+    header = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.79 Safari/537.36'}
+    url = "https://yandex.ru/pogoda/?lat=43.52914429&lon=39.98907471"
+    htmlContent = requests.get(url, headers=header)
+    # with open('test.html', 'w') as output_file:
+    #     output_file.write(htmlContent.text)
+
+    soup = bs(htmlContent.text, 'html.parser')
+
+    pogoda_fact = soup.find('div', attrs={'class': 'fact__temp-wrap'}).find('a').get('aria-label')
+    print(pogoda_fact)
+    pogoda_fact_props_wind = soup.find('div', attrs={'class': 'fact__props'}).find('div', attrs={'class': 'term term_orient_v fact__wind-speed'}).find('span', {'class': 'a11y-hidden'}).get_text()
+    print(pogoda_fact_props_wind)
+    pogoda_fact_props_humidity = soup.find('div', attrs={'class': 'fact__props'}).find('div', attrs={'class': 'term term_orient_v fact__humidity'}).find('span', {'class': 'a11y-hidden'}).get_text()
+    print(pogoda_fact_props_humidity)
+    pogoda_fact_props_water = soup.find('div', attrs={'class': 'fact__props'}).find('div', attrs={'class': 'term term_orient_v fact__water'}).find('span', {'class': 'a11y-hidden'}).get_text()
+    print(pogoda_fact_props_water)
+
+    pogoda_days = soup.find('div', attrs={'class': 'forecast-briefly__days swiper-container'}).find_all('a')
+    pogoda_days_result = ''
+    for i, day in enumerate(pogoda_days):
+        if 0 < i < 4:
+            pogoda_days_result = pogoda_days_result + str(f"{day.get('aria-label')}\n")
+
+    return (f'*Погода в Адлере сейчас!*\n'
+            f'{pogoda_days_result}'
+            f'{pogoda_fact_props_wind} {pogoda_fact_props_humidity} {pogoda_fact_props_water}\n\n'
+            f'*Прогоз на сегодня и ближайшие пару дней:*\n'
+            f''
+            )
 
 bot.infinity_polling()
