@@ -152,7 +152,7 @@ def yandex_weather_new():
             f'{pogoda_days_result}')
 
 
-if __name__ == "__main__":
-    schedule.every().day.at("20:50").do(function_to_run())
-    Thread(target=schedule_checker).start()
-    bot.infinity_polling()
+# if __name__ == "__main__":
+#     schedule.every().day.at("20:50").do(function_to_run())
+#     Thread(target=schedule_checker).start()
+bot.infinity_polling()
