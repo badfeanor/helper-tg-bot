@@ -8,6 +8,6 @@ class Settings(BaseSettings):
     BOT_NOTIFICATOR_TOKEN: str
     LOG_FILE_PATH: str = "log_file"
     class Config:
-        env_file = '../app/.env'
+        env_file = '../.env'
 
 config = Settings()
